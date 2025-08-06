@@ -15,14 +15,15 @@ autoload -Uz add-zsh-hook
 add-zsh-hook precmd pre_cmd
 
 # zed
-zed() {
-    open "$1" -a Zed
-}
+alias zed="open -a /Applications/Zed.app"
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
 
 # docker
 alias di="docker image"
 alias dc="docker compose"
 alias de="docker exec -it"
+alias dl="docker logs -f"
 alias dp="docker ps"
 
 # git
@@ -31,6 +32,7 @@ alias gb='git branch'
 alias gc='git commit -m'
 alias gd='git diff'
 alias gl='git log'
+alias gm='git merge'
 alias gst='git status'
 alias gsw='git switch'
 alias gpl='git pull'
@@ -89,13 +91,45 @@ alias carr='cargo run'
 
 alias ron='rustup override set nightly'
 
+# php
+export PATH="$HOME/.phpenv/bin:$PATH"
+eval "$(phpenv init -)"
 
 # laravel
 export PATH="/Users/haramisaki/.config/herd-lite/bin:$PATH"
 export PHP_INI_SCAN_DIR="/Users/haramisaki/.config/herd-lite/bin:$PHP_INI_SCAN_DIR"
 
+# mysql
+export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
+
 # cpp
 alias gpp='g++ -std=c++20'
+
+# terraform
+alias ter="terraform"
+
+terraform() {
+| if [[ "$PWD" == *"production"* || "$PWD" == *"prod"* ]]; then
+| | echo "   You are in the production environment! Do NOT run terraform commands here."
+| | echo "If you really need to run it, use terraform-prod instead."
+| | return 1
+| else
+| | command terraform "$@"
+| fi
+}
+
+terraform-prod() {
+| echo "🚨 Warning! You are about to run terraform in the production environment!"
+| read "answer?Are you sure you want to continue? (yes/no): "
+|
+| if [[ "$answer" != "yes" ]]; then
+| | echo "❌ Cancelled."
+| | return 1
+| fi
+|
+| command terraform "$@"
+}
+
 
 # etc
 alias ezsh='nvim ~/.zshrc && source ~/.zshrc'
@@ -103,4 +137,5 @@ alias reboot_ghostty='killall ghostty && open -a ghostty'
 alias mkdir='mkdir -p'
 alias rmds="find . -name '.DS_Store' -type f -delete"
 alias uddf="~/dotfiles/.bin/install.sh"
+alias ls="(ls -al --color=always | grep '^d' | sort) && (ls -al --color=always | grep -v '^d' | sort)"
 
