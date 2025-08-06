@@ -82,6 +82,8 @@ alias v='nvim'
 alias vi='nvim'
 alias vim='nvim'
 alias vv='nvim'
+export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
+
 
 # cargo & rust
 alias carb='cargo build'
@@ -109,25 +111,25 @@ alias gpp='g++ -std=c++20'
 alias ter="terraform"
 
 terraform() {
-| if [[ "$PWD" == *"production"* || "$PWD" == *"prod"* ]]; then
-| | echo "   You are in the production environment! Do NOT run terraform commands here."
-| | echo "If you really need to run it, use terraform-prod instead."
-| | return 1
-| else
-| | command terraform "$@"
-| fi
+  if [[ "$PWD" == *"production"* || "$PWD" == *"prod"* ]]; then
+    echo "   You are in the production environment! Do NOT run terraform commands here."
+    echo "If you really need to run it, use terraform-prod instead."
+    return 1
+  else
+    command terraform "$@"
+  fi
 }
 
 terraform-prod() {
-| echo "🚨 Warning! You are about to run terraform in the production environment!"
-| read "answer?Are you sure you want to continue? (yes/no): "
-|
-| if [[ "$answer" != "yes" ]]; then
-| | echo "❌ Cancelled."
-| | return 1
-| fi
-|
-| command terraform "$@"
+  echo "🚨 Warning! You are about to run terraform in the production environment!"
+  read "answer?Are you sure you want to continue? (yes/no): "
+
+  if [[ "$answer" != "yes" ]]; then
+    echo "❌ Cancelled."
+    return 1
+  fi
+
+  command terraform "$@"
 }
 
 
