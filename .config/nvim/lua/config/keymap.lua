@@ -8,7 +8,8 @@ vim.keymap.set("i", "JK", "<Esc>", { desc = "Exit insert mode with jk" })
 vim.keymap.set("v", "y", '"0y', { desc = "Yank to internal register only" })
 vim.keymap.set("n", "p", '"0p', { desc = "Paste from internal register only" })
 vim.keymap.set("n", "P", '"0P', { desc = "Paste before from internal register only" })
-vim.keymap.set("v", "<C-c>", '"+y', { desc = "Copy to system clipboard in visual mode" })
+-- OS ショートカットをKarabinerでブロック
+vim.keymap.set("v", "<M-c>", '"+y', { desc = "Copy to system clipboard in visual mode" }) 
 vim.keymap.set("n", "d", '"0d', { noremap = true, desc = "Delete without affecting clipboard" })
 vim.keymap.set("n", "x", '"0x', { noremap = true, desc = "Delete char without affecting clipboard" })
 vim.keymap.set("v", "d", '"0d', { noremap = true, desc = "Delete in visual mode without affecting clipboard" })
@@ -21,3 +22,5 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selected lines up", 
 -- Escで検索のハイライトを消す
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
 
+-- OS ショートカットをKarabinerでブロック
+vim.keymap.set("n", "<M-a>", "ggVG", { desc = "Select All" })

@@ -1,0 +1,3 @@
+macos-option-as-alt = true
+
+keybind = alt+c=send_seq:M-c
