@@ -56,7 +56,6 @@ alias gpl='git pull'
 alias gps='git push'
 
 # tmux
-alias etmux='vim ~/.tmux.conf && tmux display-message "Reloaded tmux.conf" && tmux source-file ~/.tmux.conf'
 alias t='tmux'
 alias tl='tmux ls'
 alias ta='tmux a'
@@ -151,10 +150,17 @@ terraform-prod() {
 
 
 # etc
-alias ezsh='nvim ~/.zshrc && source ~/.zshrc'
 alias reboot_ghostty='killall ghostty && open -a ghostty'
 alias mkdir='mkdir -p'
 alias rmds="find . -name '.DS_Store' -type f -delete"
 alias uddf="~/dotfiles/.bin/install.sh"
-alias ls="(ls -al --color=always | grep '^d' | sort) && (ls -al --color=always | grep -v '^d' | sort)"
+alias lls="(ls -al --color=always | grep '^d' | sort) && (ls -al --color=always | grep -v '^d' | sort)"
 
+#edit
+alias ezsh='nvim ~/.zshrc && source ~/.zshrc'
+alias etmux='vim ~/.tmux.conf && tmux display-message "Reloaded tmux.conf" && tmux source-file ~/.tmux.conf'
+alias evim='
+cd ~/dotfiles/.config/nvim
+vim ~/dotfiles/.config/nvim
+cd -
+'
