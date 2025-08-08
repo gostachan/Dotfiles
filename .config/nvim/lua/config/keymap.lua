@@ -9,7 +9,7 @@ vim.keymap.set("v", "y", '"0y', { desc = "Yank to internal register only" })
 vim.keymap.set("n", "p", '"0p', { desc = "Paste from internal register only" })
 vim.keymap.set("n", "P", '"0P', { desc = "Paste before from internal register only" })
 -- OS ショートカットをKarabinerでブロック
-vim.keymap.set("v", "<M-c>", '"+y', { desc = "Copy to system clipboard in visual mode" }) 
+vim.keymap.set("v", "<C-c>", '"+y', { desc = "Copy to system clipboard in visual mode" }) 
 vim.keymap.set("n", "d", '"0d', { noremap = true, desc = "Delete without affecting clipboard" })
 vim.keymap.set("n", "x", '"0x', { noremap = true, desc = "Delete char without affecting clipboard" })
 vim.keymap.set("v", "d", '"0d', { noremap = true, desc = "Delete in visual mode without affecting clipboard" })
