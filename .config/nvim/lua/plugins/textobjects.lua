@@ -37,8 +37,8 @@ return {
             ["ab"] = "@block.outer",
             ["ib"] = "@block.inner",
             -- 引数/パラメータ
-            ["ap"] = "@parameter.outer",
-            ["ip"] = "@parameter.inner",
+            ["ao"] = "@parameter.outer",
+            ["io"] = "@parameter.inner",
           },
           selection_modes = {
             ["@function.outer"]   = "V",
@@ -71,17 +71,6 @@ return {
           goto_previous_end = {
             ["[M"] = "@function.outer",
             ["[C"] = "@class.outer",
-          },
-        },
-
-        -- ▼ 引数の並べ替え (normal) : 次/前の引数と入れ替え
-        swap = {
-          enable = true,
-          swap_next = {
-            ["]p"] = "@parameter.inner",
-          },
-          swap_previous = {
-            ["[p"] = "@parameter.inner",
           },
         },
       },
