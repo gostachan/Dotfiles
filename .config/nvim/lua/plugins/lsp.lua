@@ -86,9 +86,6 @@ return {
 
       -- LSP 操作のキーマップ
       vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
-      vim.keymap.set("n", "<C-r>", function()
-        vim.diagnostic.open_float(nil, { float = true })
-      end, { desc = "Show diagnostics" })
 
       -- Phpactor: 未インポートクラスを import
       vim.keymap.set("n", "<Leader>u", function()
