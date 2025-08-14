@@ -15,7 +15,7 @@ vim.keymap.set("n", "x", '"0x', { noremap = true, desc = "Delete char without af
 vim.keymap.set("v", "d", '"0d', { noremap = true, desc = "Delete in visual mode without affecting clipboard" })
 vim.keymap.set("v", "x", '"0x', { noremap = true, desc = "Delete in visual mode without affecting clipboard" })
 
--- 選択行を移動 
+-- 選択行を移動
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selected lines down", silent = true })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selected lines up", silent = true })
 
