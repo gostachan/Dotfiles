@@ -42,8 +42,7 @@ return {
         html = "html",
         cssls = "cssls",
         rust_analyzer = "rust_analyzer",
-        pyright = "pyright",
-        intelephense = "intelephense", -- Laravel / PHP
+        -- pyright = "pyright",
       }
 
       require("mason-lspconfig").setup({
@@ -54,35 +53,10 @@ return {
       local lspconfig = require("lspconfig")
 
       for name, _ in pairs(servers) do
-        if name == "intelephense" then
-          lspconfig[name].setup({
-            capabilities = capabilities,
-            settings = {
-              intelephense = {
-                stubs = {
-                  "laravel", "apache", "bcmath", "bz2", "calendar", "core",
-                  "ctype", "curl", "date", "dom", "fileinfo", "filter", "gd",
-                  "hash", "iconv", "json", "libxml", "mbstring", "mcrypt",
-                  "mysql", "mysqli", "openssl", "pcre", "PDO", "pdo_mysql",
-                  "Phar", "readline", "Reflection", "session", "SimpleXML",
-                  "sockets", "sodium", "SPL", "standard", "tokenizer", "xml",
-                  "zip", "zlib"
-                },
-                environment = {
-                  includePaths = { "vendor" }, -- Laravel の vendor 補完
-                },
-                files = {
-                  maxSize = 5000000,
-                },
-              },
-            },
-          })
-        else
-          lspconfig[name].setup({
-            capabilities = capabilities,
-          })
-        end
-      end
+	    lspconfig[name].setup({
+	      capabilities = capabilities,
+	    })
+	  end
 
 	  vim.filetype.add({
    	  extension = {
