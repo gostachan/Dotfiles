@@ -84,6 +84,12 @@ return {
         end
       end
 
+	  vim.filetype.add({
+   	  extension = {
+   		  tr = "terraform",
+    	},
+      })
+
       -- LSP 操作のキーマップ
       vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
 

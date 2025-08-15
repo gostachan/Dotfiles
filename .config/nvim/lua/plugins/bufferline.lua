@@ -18,8 +18,8 @@ return {
 				},
 			},
 		})
-		vim.keymap.set("n", "<M-a>", "<cmd>BufferLineCyclePrev<CR>", { desc = "Prev file" })
-		vim.keymap.set("n", "<M-b>", "<cmd>BufferLineCycleNext<CR>", { desc = "Next file" })
+		vim.keymap.set("n", "<M-x>", "<cmd>BufferLineCyclePrev<CR>", { desc = "Prev file" })
+		vim.keymap.set("n", "<M-y>", "<cmd>BufferLineCycleNext<CR>", { desc = "Next file" })
 		vim.keymap.set("n", "<C-w>", "<cmd>bdelete<CR>", { desc = "Delete current buffer" })
 	end,
 }
