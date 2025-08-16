@@ -10,6 +10,7 @@ vim.opt.number = true
 vim.g.neovide_input_use_logo = true
 vim.opt.ignorecase = true  -- 通常は大文字小文字を無視
 vim.opt.smartcase  = true  -- 大文字を含むときのみ区別
+vim.opt.wrap = false
 
 -- 永続 undo を有効化
 vim.opt.undofile = true
