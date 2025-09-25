@@ -13,6 +13,36 @@ return {
       local telescope = require("telescope")
       local themes = require("telescope.themes")
       local builtin = require("telescope.builtin")
+      local Job = require("plenary.job")
+
+      -- Git 管理ファイル + .env に限定した live_grep ラッパ
+	  local function live_grep_git_tracked_with_env()
+        Job:new({
+          command = "sh",
+          args = { "-c", [[
+            if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+              git ls-files
+              [ -f .env ] && echo .env
+            else
+              [ -f .env ] && echo .env
+            fi
+          ]] },
+          on_exit = function(j, _)
+            local files = j:result() or {}
+            if #files == 0 then
+              vim.schedule(function()
+                vim.notify("[telescope] no git-tracked files (and no .env).", vim.log.levels.WARN)
+              end)
+              return
+            end
+            vim.schedule(function()
+              require("telescope.builtin").live_grep({
+                search_dirs = files, -- 対象を限定
+              })
+            end)
+          end,
+        }):start()
+      end
 
       telescope.setup({
         defaults = {
@@ -20,9 +50,9 @@ return {
           sorting_strategy = "ascending",
           layout_config = { prompt_position = "top" },
 
-          -- ここを有効にすると .env など ignore 済み・隠しファイルも候補に入ります
-          hidden = true,
-          no_ignore = true,
+          -- ここは OFF。未トラッキングを出さないため Git に委ねる
+          hidden = false,
+          no_ignore = false,
 
           file_ignore_patterns = {
             "node_modules",
@@ -32,26 +62,29 @@ return {
           },
         },
         pickers = {
-          -- find_files は .gitignore を無視して隠しファイルも拾う
+          -- Git でトラッキング済みのファイルのみ + 例外的に .env を含める
           find_files = {
-            hidden = true,
-            no_ignore = true,
+            find_command = {
+              "sh", "-c",
+              [[
+                if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+                  git ls-files && [ -f .env ] && echo .env
+                else
+                  [ -f .env ] && echo .env
+                fi
+              ]]
+            },
+            hidden = false,
+            no_ignore = false,
             file_ignore_patterns = {
               "node_modules",
               ".ruff_cache",
               ".git/",
               ".mypy_cache",
             },
-            -- fd が入っているなら明示指定してより確実に
-            -- コメントアウトで自動検出にも任せられます
-            -- find_command = { "fd", "--type", "f", "--hidden", "--no-ignore" },
           },
-          -- live_grep も ignore を無視＆隠しファイル対象に
-          live_grep = {
-            additional_args = function()
-              return { "--hidden", "--no-ignore" }
-            end,
-          },
+          -- live_grep は上のラッパ関数で search_dirs を渡すのでここは最小限
+          live_grep = {},
         },
         extensions = {
           ["ui-select"] = themes.get_dropdown({}),
@@ -60,16 +93,16 @@ return {
 
       telescope.load_extension("ui-select")
 
-      -- キーマップ（.env 等も検索対象に含まれる）
-      vim.keymap.set({ "n", "v" }, "<C-m>", function()
-        builtin.find_files({ hidden = true, no_ignore = true })
-      end, { desc = "Find files (include hidden & ignored)" })
+      -- キーマップ
+      -- Git 管理ファイル + .env だけ検索
+      vim.keymap.set({ "n", "v" }, "<C-m>", builtin.find_files, { desc = "Find files (git-tracked + .env)" })
+      -- Git 管理ファイル + .env だけを対象に grep
+      vim.keymap.set({ "n", "v" }, "<C-g>", live_grep_git_tracked_with_env, { desc = "Live grep (git-tracked + .env)" })
 
-      vim.keymap.set({ "n", "v" }, "<C-g>", function()
-        builtin.live_grep({
-          additional_args = function() return { "--hidden", "--no-ignore" } end,
-        })
-      end, { desc = "Live grep (include hidden & ignored)" })
+      -- LSP 定義ジャンプ（Telescope UI で重複も見やすい）
+      vim.keymap.set("n", "gd", function()
+        builtin.lsp_definitions({ reuse_win = true })
+      end, { desc = "Go to definition (Telescope)" })
 
       vim.keymap.set({ "n", "v" }, "<C-b>", builtin.buffers, { desc = "Find buffer" })
     end,
