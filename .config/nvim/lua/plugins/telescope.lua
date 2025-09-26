@@ -19,14 +19,14 @@ return {
 	  local function live_grep_git_tracked_with_env()
         Job:new({
           command = "sh",
-          args = { "-c", [[
-            if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-              git ls-files
-              [ -f .env ] && echo .env
-            else
-              [ -f .env ] && echo .env
-            fi
-          ]] },
+		  args = { "-c", [[
+		    if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+		  	git ls-files -co --exclude-standard
+		  	[ -f .env ] && echo .env
+		    else
+		  	[ -f .env ] && echo .env
+		    fi
+		  ]] },
           on_exit = function(j, _)
             local files = j:result() or {}
             if #files == 0 then
@@ -64,16 +64,16 @@ return {
         pickers = {
           -- Git でトラッキング済みのファイルのみ + 例外的に .env を含める
           find_files = {
-            find_command = {
-              "sh", "-c",
-              [[
-                if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-                  git ls-files && [ -f .env ] && echo .env
-                else
-                  [ -f .env ] && echo .env
-                fi
-              ]]
-            },
+			find_command = {
+			  "sh", "-c",
+			  [[
+				if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+				  git ls-files -co --exclude-standard && [ -f .env ] && echo .env
+				else
+				  [ -f .env ] && echo .env
+				fi
+			  ]]
+			},
             hidden = false,
             no_ignore = false,
             file_ignore_patterns = {
