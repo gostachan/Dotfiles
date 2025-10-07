@@ -3,6 +3,7 @@ return {
     "neovim/nvim-lspconfig",
     lazy = false,
     priority = 1000,
+
     dependencies = {
       {
         "hrsh7th/nvim-cmp",
@@ -31,28 +32,23 @@ return {
         end,
       },
     },
+
     config = function()
-      -- ===== Common =====
+      -- ====== 共通Capability ======
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-      -- root_pattern を Neovim 標準APIで実装（lspconfig.util 依存を排除）
+      -- ====== 汎用root判定（Neovim標準API） ======
       local function root_pattern(patterns)
         return function(fname)
-          local start = fname
-          if not start or start == "" then
-            local bufname = vim.api.nvim_buf_get_name(0)
-            start = (bufname ~= "" and bufname) or vim.loop.cwd()
-          end
+          local start = (fname ~= "" and fname) or vim.api.nvim_buf_get_name(0)
+          if not start or start == "" then start = vim.loop.cwd() end
           local dir = vim.fs.dirname(start)
           local found = vim.fs.find(patterns, { path = dir, upward = true })[1]
           return found and vim.fs.dirname(found) or nil
         end
       end
 
-      local function git_root()
-        return root_pattern({ ".git" })(vim.api.nvim_buf_get_name(0))
-      end
-
+      -- ====== Laravel検出（composer.jsonに"laravel/framework"を含む） ======
       local function is_laravel_root(root)
         if not root or root == "" then return false end
         if vim.fn.filereadable(root .. "/composer.json") == 1 then
@@ -64,93 +60,65 @@ return {
         return vim.fn.isdirectory(root .. "/vendor/laravel") == 1
       end
 
+      -- ====== Diagnostics表示設定 ======
       vim.diagnostic.config({
         virtual_text = { source = "always" },
         float        = { source = "always" },
       })
 
-      local function on_attach_once(client, _)
-        -- 同一 name & root_dir の多重 attach を防ぐ
-        local same_name = vim.lsp.get_clients({ name = client.name })
-        for _, c in ipairs(same_name) do
-          if c.id ~= client.id
-             and c.config and client.config
-             and c.config.root_dir == client.config.root_dir
-          then
-            client:stop()
-            return
-          end
-        end
-        -- phpactor の診断を Laravel プロジェクトでは抑制
-        if client.name == "phpactor" then
-          local root = (client.config and client.config.root_dir) or git_root()
-          if is_laravel_root(root) then
-            client.server_capabilities.diagnosticProvider = false
-          end
-        end
-      end
+      -- ====== Laravel Language Server（常時有効 / 自動attach） ======
+	  vim.lsp.config("laravel_ls", {
+        cmd = { "laravel-ls" },
+        filetypes = { "php", "blade" },
+        root_dir = function(fname)
+          local root = root_pattern({ "composer.json", ".git" })(fname)
+          return root or vim.loop.cwd()
+        end,
+        capabilities = vim.tbl_deep_extend("force", capabilities, {
+          general = {
+            positionEncodings = { "utf-8" },
+          },
+        }),
+      })
+      vim.lsp.enable("laravel_ls")
 
-      -- 新APIで登録
-      local function register(name, extra)
-        local cfg = {
-          capabilities = capabilities,
-          on_attach   = on_attach_once,
-        }
-        if extra then
-          for k, v in pairs(extra) do cfg[k] = v end
-        end
-        vim.lsp.config(name, cfg)
-      end
+      -- ====== Lua LS（Neovim自体の設定用） ======
+      vim.lsp.config("lua_ls", {
+        cmd = { "lua-language-server" },
+        filetypes = { "lua" },
+        settings = {
+          Lua = {
+            diagnostics = { globals = { "vim" } },
+            workspace   = { checkThirdParty = false },
+          },
+        },
+        capabilities = capabilities,
+      })
+      pcall(vim.lsp.enable, "lua_ls")
 
-      -- Mason のバイナリディレクトリ
-      local mason_bin = vim.fn.stdpath("data") .. "/mason/bin"
-
-      -- 対応サーバ一覧（ensure_installed と合わせる想定）
-      local servers = {
-        "clangd",
-        "cssls",
-        "gopls",
-        "html",
-        "jsonls",
-        "laravel_ls",
-        "lua_ls",
-        "rust_analyzer",
-      }
-
-      -- 個別設定
-      for _, server in ipairs(servers) do
-        if server == "laravel_ls" then
-          register("laravel_ls", {
-            root_dir = root_pattern({ "composer.json", ".git" }),
-            -- “you need to make through the path to laravel_ls” → Mason の実行ファイルを明示
-            cmd = { mason_bin .. "/laravel-ls" },
-          })
-        elseif server == "lua_ls" then
-          register("lua_ls", {
-            settings = {
-              Lua = {
-                diagnostics = { globals = { "vim" } },
-                workspace   = { checkThirdParty = false },
-              },
-            },
-          })
-        else
-          register(server)
-        end
-      end
-
-      -- Terraform の拡張子補完
-      vim.filetype.add({ extension = { tr = "terraform" } })
-
-      -- Phpactor import
+      -- ====== Phpactor import（任意） ======
       vim.keymap.set("n", "<Leader>u", function()
         vim.cmd("Phpactor import_class")
       end, { desc = "Import class with Phpactor" })
 
-      -- 現バッファに attach 済みのクライアント簡易表示
-      vim.api.nvim_create_user_command("LspInfo", function()
-        print(vim.inspect(vim.lsp.get_clients({ bufnr = 0 })))
-      end, {})
+      -- ====== attachデバッグ ======
+      vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(args)
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          print("✅ LSP attached:", client.name, "→", client.config.root_dir)
+        end,
+      })
+
+      -- ====== 自動起動保証（保険） ======
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = { "php", "blade" },
+        callback = function()
+          local clients = vim.lsp.get_clients({ name = "laravel_ls", bufnr = 0 })
+          if #clients == 0 then
+            vim.cmd("LspStart laravel_ls")
+          end
+        end,
+      })
     end,
   },
 }

@@ -22,7 +22,6 @@ return {
           "gopls",
           "html",
           "jsonls",
-          "laravel_ls",
           "lua_ls",
           "rust_analyzer",
         },
