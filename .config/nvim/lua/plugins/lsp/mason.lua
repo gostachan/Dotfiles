@@ -23,6 +23,7 @@ return {
           "html",
           "jsonls",
           "lua_ls",
+          "phpactor",
           "rust_analyzer",
         },
         automatic_installation = true,
