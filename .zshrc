@@ -47,6 +47,7 @@ alias dp="docker ps"
 alias ga='git add'
 alias gb='git branch'
 alias gc='git commit -m'
+alias gca='git commit --amend'
 alias gd='git diff'
 alias gl='git log'
 alias gm='git merge'
