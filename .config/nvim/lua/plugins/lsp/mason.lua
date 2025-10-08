@@ -24,6 +24,7 @@ return {
           "jsonls",
           "lua_ls",
           "phpactor",
+          "intelephense",
           "rust_analyzer",
         },
         automatic_installation = true,

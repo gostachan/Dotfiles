@@ -39,26 +39,51 @@ return {
 	    positionEncodings = { "utf-8" },
 	  }
 
-	  -- Laravel LS（hover / completion 用）
-      vim.lsp.config("laravel_ls", {
-        cmd = { "laravel-ls" },
+	  vim.lsp.config("intelephense", {
+        cmd = { "intelephense", "--stdio" },
         filetypes = { "php", "blade" },
         capabilities = capabilities,
+        settings = {
+          intelephense = {
+            completion = {
+              autoImport = true,
+            },
+            diagnostics = {
+              undefinedTypes = true,
+              undefinedSymbols = true,
+            },
+            environment = {
+              includePaths = { "app", "vendor" },
+            },
+            files = {
+              associations = { "*.php", "*.blade.php" },
+            },
+          },
+        },
+	  -- 定義ジャンプだけ弱いのでphpactorにやらせる
         on_attach = function(client)
           client.server_capabilities.definitionProvider = false
         end,
       })
-      vim.lsp.enable("laravel_ls")
+      vim.lsp.enable("intelephense")
       
-	  vim.lsp.config("phpactor", {
+      -----------------------------------------------------
+      -- Phpactor（定義ジャンプ専用）
+      -----------------------------------------------------
+      vim.lsp.config("phpactor", {
         cmd = { "phpactor", "language-server" },
         filetypes = { "php" },
         on_attach = function(client)
-          -- Phpactor の診断を完全無視
-          client.handlers["textDocument/publishDiagnostics"] = function() end
-          -- Hover など不要機能も無効化
+	    -- 定義ジャンプ以外弱いのでintelephenseにやらせる
           client.server_capabilities.hoverProvider = false
-          -- client.server_capabilities.completionProvider = nil
+          client.server_capabilities.completionProvider = nil
+          client.server_capabilities.signatureHelpProvider = nil
+          client.server_capabilities.renameProvider = nil
+          client.server_capabilities.documentFormattingProvider = false
+          client.server_capabilities.codeActionProvider = false
+          client.server_capabilities.referencesProvider = false
+          client.server_capabilities.workspaceSymbolProvider = false
+          client.handlers["textDocument/publishDiagnostics"] = function() end
         end,
       })
       vim.lsp.enable("phpactor")
