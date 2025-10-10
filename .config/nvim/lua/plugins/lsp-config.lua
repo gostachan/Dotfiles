@@ -35,50 +35,81 @@ return {
 
     config = function()
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
-	  capabilities.general = {
-	    positionEncodings = { "utf-8" },
-	  }
+      capabilities.general = {
+        positionEncodings = { "utf-8" },
+      }
 
-	  vim.lsp.config("intelephense", {
+      -----------------------------------------------------
+      -- smart_rename (Phpactor優先)
+      -----------------------------------------------------
+      local function smart_rename()
+        local clients = vim.lsp.get_active_clients({ bufnr = 0 })
+        if #clients == 0 then
+          vim.notify("No LSP client attached", vim.log.levels.WARN)
+          return
+        end
+
+        -- Phpactorが有効なら優先してrename
+        for _, client in ipairs(clients) do
+          if client.name == "phpactor" and client.server_capabilities.renameProvider then
+            vim.lsp.buf.rename()
+            return
+          end
+        end
+
+        -- Phpactorがない場合はfallback（intelephenseなど）
+        for _, client in ipairs(clients) do
+          if client.server_capabilities.renameProvider then
+            vim.lsp.buf.rename()
+            return
+          end
+        end
+
+        vim.notify("No LSP supports rename for this file", vim.log.levels.WARN)
+      end
+
+      -----------------------------------------------------
+      -- intelephense 設定 (laravelでは基本これを使う)
+      -----------------------------------------------------
+      vim.lsp.config("intelephense", {
         cmd = { "intelephense", "--stdio" },
         filetypes = { "php", "blade" },
         capabilities = capabilities,
         settings = {
           intelephense = {
-            completion = {
-              autoImport = true,
-            },
+            completion = { autoImport = true },
             diagnostics = {
               undefinedTypes = true,
               undefinedSymbols = true,
             },
-            environment = {
-              includePaths = { "app", "vendor" },
-            },
-            files = {
-              associations = { "*.php", "*.blade.php" },
-            },
+            environment = { includePaths = { "app", "vendor" } },
+            files = { associations = { "*.php", "*.blade.php" } },
           },
         },
-	  -- 定義ジャンプだけ弱いのでphpactorにやらせる
-        on_attach = function(client)
+        on_attach = function(client, bufnr)
           client.server_capabilities.definitionProvider = false
+          client.server_capabilities.renameProvider = false
+
+          local opts = { noremap = true, silent = true, buffer = bufnr }
+          vim.keymap.set("n", "cd", smart_rename, opts)
+          vim.keymap.set("n", "<leader>rn", smart_rename, opts)
         end,
       })
       vim.lsp.enable("intelephense")
-      
+
       -----------------------------------------------------
-      -- Phpactor（定義ジャンプ専用）
+      -- Phpactor 設定 (definitionProvider, renameProviderだけphpactor)
       -----------------------------------------------------
       vim.lsp.config("phpactor", {
         cmd = { "phpactor", "language-server" },
         filetypes = { "php" },
-        on_attach = function(client)
-	    -- 定義ジャンプ以外弱いのでintelephenseにやらせる
+        on_attach = function(client, bufnr)
+          -- phpactorはrename対応にする
+          client.server_capabilities.renameProvider = true
+          -- hover, completionなどはintelephenseに任せる
           client.server_capabilities.hoverProvider = false
           client.server_capabilities.completionProvider = nil
           client.server_capabilities.signatureHelpProvider = nil
-          client.server_capabilities.renameProvider = nil
           client.server_capabilities.documentFormattingProvider = false
           client.server_capabilities.codeActionProvider = false
           client.server_capabilities.referencesProvider = false
@@ -88,7 +119,7 @@ return {
       })
       vim.lsp.enable("phpactor")
 
-	  vim.lsp.enable('clangd')
+      vim.lsp.enable("clangd")
     end,
   },
 }
