@@ -120,6 +120,17 @@ return {
       vim.lsp.enable("phpactor")
 
       vim.lsp.enable("clangd")
+
+	  vim.o.updatetime = 100
+	  vim.api.nvim_create_autocmd("CursorHold", {
+        callback = function()
+          local diags = vim.diagnostic.get(0, { lnum = vim.fn.line('.') - 1 })
+          if vim.tbl_isempty(diags) then return end
+          local msg = table.concat(vim.tbl_map(function(d) return d.message end, diags), " | ")
+          vim.api.nvim_echo({{msg, "WarningMsg"}}, false, {})
+        end
+      })
+
     end,
   },
 }
