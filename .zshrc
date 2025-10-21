@@ -156,6 +156,7 @@ alias mkdir='mkdir -p'
 alias rmds="find . -name '.DS_Store' -type f -delete"
 alias uddf="~/dotfiles/.bin/install.sh"
 alias lls="(ls -al --color=always | grep '^d' | sort) && (ls -al --color=always | grep -v '^d' | sort)"
+alias fixclock='sudo sntp -sS time.google.com'
 
 #edit
 alias ezsh='nvim ~/.zshrc && source ~/.zshrc'
