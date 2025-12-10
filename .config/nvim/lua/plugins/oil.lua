@@ -69,7 +69,6 @@ return {
 				["c."]    = { "actions.cd", mode = "n" },
 				["cs"]    = { "actions.change_sort", mode = "n" },
 				["gx"]    = "actions.open_external",
-				["<Esc>"] = { "actions.close", mode = "n" },
 				["<C-p>"] = { "actions.preview", mode = "n" }, 
 			},
 			use_default_keymaps = true,
