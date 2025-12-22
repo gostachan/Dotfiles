@@ -160,6 +160,7 @@ alias fixclock='sudo sntp -sS time.google.com'
 alias stripe_login='stripe login'
 alias stripe_listen='stripe listen --forward-to http://127.0.0.1:80/stripe/webhook'
 alias stripe_test='stripe trigger payment_intent.succeeded'
+alias mysqlp='mysql -h mysql -u user -p practice'
 
 #edit
 alias ezsh='nvim ~/.zshrc && source ~/.zshrc'
