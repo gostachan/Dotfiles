@@ -58,6 +58,7 @@
 !/.xsessionrc
 !/.config/
 !/.config/**
+/.config/zsh/99-local.zsh
 !/.gitignore_global
 !/.gitconfig_shared
 
