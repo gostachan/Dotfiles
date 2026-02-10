@@ -6,3 +6,4 @@ if [ -d "$ZSH_CONFIG_DIR" ]; then
   done
 fi
 
+
