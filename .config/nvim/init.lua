@@ -11,6 +11,12 @@ vim.g.neovide_input_use_logo = true
 vim.opt.ignorecase = true  -- 通常は大文字小文字を無視
 vim.opt.smartcase  = true  -- 大文字を含むときのみ区別
 vim.opt.wrap = false
+vim.opt.autoread = true
+
+vim.api.nvim_create_autocmd(
+  { "FocusGained", "BufEnter", "CursorHold" },
+  { command = "checktime" }
+)
 
 vim.keymap.set('n', '<C-z>', '<Nop>', { noremap = true, silent = true })
 vim.keymap.set('i', '<C-z>', '<Nop>', { noremap = true, silent = true })
