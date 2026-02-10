@@ -6,3 +6,5 @@ if [ -d "$ZSH_CONFIG_DIR" ]; then
   done
 fi
 
+
+[ -f "/Users/misaki/.ghcup/env" ] && . "/Users/misaki/.ghcup/env" # ghcup-env
