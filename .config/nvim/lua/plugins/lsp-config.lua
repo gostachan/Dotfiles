@@ -69,6 +69,17 @@ return {
       end
 
       -----------------------------------------------------
+      -- gopls 設定（最小・安全）
+      -----------------------------------------------------
+      vim.lsp.config("gopls", {
+        cmd = { "gopls" },
+        filetypes = { "go", "gomod", "gowork", "gotmpl" },
+        capabilities = capabilities,
+      })
+
+      vim.lsp.enable("gopls")
+
+      -----------------------------------------------------
       -- intelephense 設定 (laravelでは基本これを使う)
       -----------------------------------------------------
       vim.lsp.config("intelephense", {
