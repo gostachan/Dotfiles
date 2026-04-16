@@ -47,6 +47,9 @@ alias gpp='g++ -std=c++20'
 # terraform
 alias ter="terraform"
 
+# marp
+alias marpp="marp --preview"
+
 # etc
 alias reboot_ghostty='killall ghostty && open -a ghostty'
 alias mkdir='mkdir -p'

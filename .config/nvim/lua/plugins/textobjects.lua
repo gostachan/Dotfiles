@@ -1,4 +1,3 @@
--- lua/plugins/treesitter-textobjects.lua
 return {
   {
     "nvim-treesitter/nvim-treesitter",
@@ -7,14 +6,12 @@ return {
     dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
     opts = {
       ensure_installed = {
-        "c", "cpp", "php","lua","vim","vimdoc","query",
-        "javascript","typescript","tsx","json","html","css",
-        "bash","markdown","markdown_inline","go","rust","python",
+        "c", "cpp", "php", "lua", "vim", "vimdoc", "query",
+        "javascript", "typescript", "tsx", "json", "html", "css",
+        "bash", "markdown", "markdown_inline", "go", "rust", "python",
       },
       auto_install = true,
-
       highlight = { enable = true },
-
       textobjects = {
         select = {
           enable = true,
@@ -35,8 +32,8 @@ return {
           },
           selection_modes = {
             ["@function.outer"] = "V",
-            ["@class.outer"]    = "V",
-            ["@block.outer"]    = "V",
+            ["@class.outer"] = "V",
+            ["@block.outer"] = "V",
           },
           include_surrounding_whitespace = true,
         },
@@ -66,9 +63,6 @@ return {
         },
       },
     },
-    config = function(_, opts)
-      require("nvim-treesitter.configs").setup(opts)
-    end,
+    main = "nvim-treesitter.configs",
   },
 }
-

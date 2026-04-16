@@ -17,3 +17,6 @@ export PATH="$PATH:$HOME/.pub-cache/bin"
 
 # claude code
 export PATH="$HOME/.local/bin:$PATH"
+
+# mise
+eval "$(mise activate zsh)"
