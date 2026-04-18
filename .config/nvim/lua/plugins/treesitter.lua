@@ -10,10 +10,29 @@ return {
     config = function()
       local has_tree_sitter_cli = vim.fn.executable("tree-sitter") == 1
       local ts = require("nvim-treesitter")
+      local function register_kulala_parser()
+        local parser_path = vim.fs.joinpath(vim.fn.stdpath("data"), "lazy", "kulala.nvim", "lua", "tree-sitter")
+        if not vim.uv.fs_stat(parser_path) then
+          return false
+        end
+
+        vim.opt.rtp:append(parser_path)
+        require("nvim-treesitter.parsers").kulala_http = {
+          install_info = {
+            path = parser_path,
+            generate = false,
+            generate_from_json = false,
+            queries = "queries/kulala_http",
+          },
+        }
+
+        return true
+      end
+      local has_kulala_parser = register_kulala_parser()
 
       ts.setup()
 
-      if has_tree_sitter_cli then
+      if has_tree_sitter_cli or has_kulala_parser then
         local languages = {
           "bash",
           "c",
@@ -38,6 +57,9 @@ return {
           "vim",
           "vimdoc",
         }
+        if has_kulala_parser then
+          table.insert(languages, "kulala_http")
+        end
 
         local installed = {}
         for _, lang in ipairs(ts.get_installed("parsers")) do
