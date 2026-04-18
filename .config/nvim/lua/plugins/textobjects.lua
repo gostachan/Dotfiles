@@ -4,6 +4,14 @@ return {
     build = ":TSUpdate",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
+    config = function(_, opts)
+      local status, configs = pcall(require, "nvim-treesitter.configs")
+      if status then
+        configs.setup(opts)
+      else
+        require("nvim-treesitter").setup(opts)
+      end
+    end,
     opts = {
       ensure_installed = {
         "c", "cpp", "php", "lua", "vim", "vimdoc", "query",
