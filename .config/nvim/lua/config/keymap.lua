@@ -24,3 +24,9 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highl
 
 -- OS ショートカットをKarabinerでブロック
 vim.keymap.set("n", "<M-a>", "ggVG", { desc = "Select All" })
+
+-- Window navigation without using <C-w>
+vim.keymap.set("n", "<leader>h", "<Cmd>wincmd h<CR>", { desc = "Move to left window" })
+vim.keymap.set("n", "<leader>j", "<Cmd>wincmd j<CR>", { desc = "Move to lower window" })
+vim.keymap.set("n", "<leader>k", "<Cmd>wincmd k<CR>", { desc = "Move to upper window" })
+vim.keymap.set("n", "<leader>l", "<Cmd>wincmd l<CR>", { desc = "Move to right window" })

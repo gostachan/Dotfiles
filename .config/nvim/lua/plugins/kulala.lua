@@ -52,11 +52,18 @@ return {
     vscode_rest_client_environmentvars = true,
     request_timeout = 10000,
     ui = {
-      display_mode = "split",
-      split_direction = "vertical",
-      default_view = "body",
+      display_mode = "float",
+      default_view = "headers_body",
       winbar = true,
       show_request_summary = true,
+      win_opts = {
+        width = math.floor(vim.o.columns * 0.9),
+        height = math.floor(vim.o.lines * 0.85),
+        border = "rounded",
+        wo = {
+          wrap = false,
+        },
+      },
     },
     lsp = {
       enable = true,
