@@ -30,3 +30,40 @@ vim.keymap.set("n", "<leader>h", "<Cmd>wincmd h<CR>", { desc = "Move to left win
 vim.keymap.set("n", "<leader>j", "<Cmd>wincmd j<CR>", { desc = "Move to lower window" })
 vim.keymap.set("n", "<leader>k", "<Cmd>wincmd k<CR>", { desc = "Move to upper window" })
 vim.keymap.set("n", "<leader>l", "<Cmd>wincmd l<CR>", { desc = "Move to right window" })
+
+local function move_keep_screen_row(motion)
+  return function()
+    local target_row = vim.fn.winline()
+    vim.cmd.normal({ args = { motion }, bang = true })
+
+    local delta = vim.fn.winline() - target_row
+    if delta == 0 then
+      return
+    end
+
+    local view = vim.fn.winsaveview()
+    view.topline = math.max(1, view.topline + delta)
+    vim.fn.winrestview(view)
+  end
+end
+
+local function move_keep_screen_col(motion)
+  return function()
+    local target_col = vim.fn.wincol()
+    vim.cmd.normal({ args = { motion }, bang = true })
+
+    local delta = vim.fn.wincol() - target_col
+    if delta == 0 then
+      return
+    end
+
+    local view = vim.fn.winsaveview()
+    view.leftcol = math.max(0, view.leftcol + delta)
+    vim.fn.winrestview(view)
+  end
+end
+
+vim.keymap.set("n", "J", move_keep_screen_row("j"), { desc = "Move down while keeping screen row" })
+vim.keymap.set("n", "K", move_keep_screen_row("k"), { desc = "Move up while keeping screen row" })
+vim.keymap.set("n", "H", move_keep_screen_col("h"), { desc = "Move left while keeping screen column" })
+vim.keymap.set("n", "L", move_keep_screen_col("l"), { desc = "Move right while keeping screen column" })
