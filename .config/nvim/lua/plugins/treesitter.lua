@@ -10,6 +10,7 @@ return {
     config = function()
       local has_tree_sitter_cli = vim.fn.executable("tree-sitter") == 1
       local ts = require("nvim-treesitter")
+      local ts_parsers = require("nvim-treesitter.parsers")
       local function register_kulala_parser()
         local parser_path = vim.fs.joinpath(vim.fn.stdpath("data"), "lazy", "kulala.nvim", "lua", "tree-sitter")
         if not vim.uv.fs_stat(parser_path) then
@@ -31,6 +32,14 @@ return {
       local has_kulala_parser = register_kulala_parser()
 
       ts.setup()
+
+      -- telescope.nvim on 0.1.x still expects this helper from older
+      -- nvim-treesitter releases.
+      if ts_parsers.ft_to_lang == nil and vim.treesitter.language and vim.treesitter.language.get_lang then
+        ts_parsers.ft_to_lang = function(ft)
+          return vim.treesitter.language.get_lang(ft) or ft
+        end
+      end
 
       if has_tree_sitter_cli or has_kulala_parser then
         local languages = {

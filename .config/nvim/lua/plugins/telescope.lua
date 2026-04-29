@@ -49,6 +49,9 @@ return {
           layout_strategy = "horizontal",
           sorting_strategy = "ascending",
           layout_config = { prompt_position = "top" },
+          preview = {
+            treesitter = false,
+          },
 
           -- ここは OFF。未トラッキングを出さないため Git に委ねる
           hidden = false,
@@ -108,4 +111,3 @@ return {
     end,
   },
 }
-
