@@ -31,6 +31,26 @@ vim.keymap.set("n", "<leader>j", "<Cmd>wincmd j<CR>", { desc = "Move to lower wi
 vim.keymap.set("n", "<leader>k", "<Cmd>wincmd k<CR>", { desc = "Move to upper window" })
 vim.keymap.set("n", "<leader>l", "<Cmd>wincmd l<CR>", { desc = "Move to right window" })
 
+local function copy_current_file_path(modifier, label)
+  return function()
+    local path = vim.fn.expand("%" .. modifier)
+    if path == nil or path == "" then
+      vim.notify("Current buffer has no file path to copy.", vim.log.levels.WARN)
+      return
+    end
+
+    vim.fn.setreg("+", path)
+    vim.notify(label .. ": " .. path, vim.log.levels.INFO)
+  end
+end
+
+vim.keymap.set("n", "<leader>pr", copy_current_file_path(":.", "Copied relative path"), {
+  desc = "Copy current file path relative to cwd",
+})
+vim.keymap.set("n", "<leader>pa", copy_current_file_path(":p", "Copied absolute path"), {
+  desc = "Copy current file absolute path",
+})
+
 local function move_keep_screen_row(motion)
   return function()
     local target_row = vim.fn.winline()
