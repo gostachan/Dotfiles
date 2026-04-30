@@ -1,6 +1,6 @@
 # vim
 export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
-#
+
 # go
 export PATH=$PATH:$(go env GOPATH)/bin
 
@@ -23,3 +23,6 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # mise
 eval "$(mise activate zsh)"
+
+# DELETEME
+# export AWS_PROFILE=default
