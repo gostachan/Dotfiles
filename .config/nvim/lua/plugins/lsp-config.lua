@@ -72,6 +72,7 @@ return {
           capabilities = capabilities,
           on_attach = on_attach,
         }, settings))
+        vim.lsp.enable(server)
       end
 
       vim.o.updatetime = 100

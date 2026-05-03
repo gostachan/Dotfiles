@@ -12,7 +12,6 @@ return {
         "neo-tree",
         "oil",
         "lazy",
-        "mason",
         "noice",
         "qf",
       },
@@ -26,4 +25,3 @@ return {
     end,
   },
 }
-

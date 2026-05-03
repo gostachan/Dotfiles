@@ -54,6 +54,22 @@ Homebrew を残す場合でも、対象は cask のみに絞る。
 
 Homebrew 連携を使う場合でも、それは「Nix で Homebrew を置き換える」ことではなく、「Nix の設定から Homebrew の状態を操作する」ことです。
 
+macOS 専用の `nix-darwin` module は `nix/darwin.nix` に置く。Karabiner-Elements のような macOS 専用サービスもこのファイルで宣言する。
+
+この repo の Nix entrypoint は `flake.nix`。現在の macOS 構成は `default` として定義する。
+
+初回適用:
+
+```sh
+sudo nix run github:nix-darwin/nix-darwin/master#darwin-rebuild -- switch --flake ~/.dotfiles#default
+```
+
+`darwin-rebuild` が入った後の再適用:
+
+```sh
+sudo darwin-rebuild switch --flake ~/.dotfiles#default
+```
+
 ## Homebrew を cask だけに絞る理由
 
 CLI ツールは Nix で管理した方が再現性が高い。一方で、macOS の GUI アプリは Nix だけで扱うと次の問題が出やすい。
@@ -72,6 +88,12 @@ CLI ツールは Nix で管理した方が再現性が高い。一方で、macOS
 3. shell の `PATH` から `/opt/homebrew/bin` 前提の設定を減らす
 4. cask が本当に必要なものだけ残す
 5. Homebrew formula が空に近づいたら、Homebrew 自体を残すか削除するか判断する
+
+移行対象の Nix package list は `nix/packages.nix` に置く。`nix-darwin` では `environment.systemPackages`、`home-manager` では `home.packages` から import して使う。
+
+Nixpkgs の unfree package は全許可せず、`nix/nixpkgs-config.nix` の `allowUnfreePredicate` で必要なものだけ許可する。Claude Code 本体は Nix で管理し、ログイン情報などのユーザー状態は dotfiles では管理しない。
+
+Neovim の LSP サーバー本体も Nix で管理する。Mason による LSP 自動インストールは使わない。
 
 ## 注意点
 

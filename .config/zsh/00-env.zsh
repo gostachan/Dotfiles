@@ -1,6 +1,3 @@
-# vim
-export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
-
 # go
 export PATH=$PATH:$(go env GOPATH)/bin
 
