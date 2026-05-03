@@ -63,7 +63,8 @@
 !/.gitconfig_shared
 
 !/README.md
+!/AGENTS.md
+!/CLAUDE.md
 !/LICENSE
 !.gitignore
 !.gitkeep
-
