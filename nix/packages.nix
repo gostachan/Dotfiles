@@ -25,6 +25,7 @@ let
     marp-cli
     neovim
     podman
+    ripgrep
     terraform
     tmux
     tree-sitter
