@@ -54,11 +54,27 @@ Homebrew を残す場合でも、対象は cask のみに絞る。
 
 Homebrew 連携を使う場合でも、それは「Nix で Homebrew を置き換える」ことではなく、「Nix の設定から Homebrew の状態を操作する」ことです。
 
-macOS 専用の `nix-darwin` module は `nix/darwin.nix` に置く。Karabiner-Elements のような macOS 専用サービスもこのファイルで宣言する。
+macOS 専用の `nix-darwin` module は `nix/darwin.nix` に置く。Karabiner-Elements のような macOS 専用アプリもこのファイルで宣言する。
+
+Karabiner-Elements は Nix package として入れる。`services.karabiner-elements` は現在の package layout と launchd plist の参照が合わないため使わない。
+
+標準 shell は zsh を使う。`nix/darwin.nix` で `programs.zsh.enable = true` として有効化する。
 
 この repo の Nix entrypoint は `flake.nix`。現在の macOS 構成は `default` として定義する。
 
-初回適用:
+新しい Mac の初回セットアップ:
+
+```sh
+~/.dotfiles/.bin/bootstrap.sh
+```
+
+確認なしで進める場合:
+
+```sh
+~/.dotfiles/.bin/bootstrap.sh --yes
+```
+
+手動で初回適用する場合:
 
 ```sh
 sudo nix run github:nix-darwin/nix-darwin/master#darwin-rebuild -- switch --flake ~/.dotfiles#default

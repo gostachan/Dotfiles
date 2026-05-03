@@ -6,13 +6,15 @@
   nixpkgs.config = import ./nixpkgs-config.nix { inherit lib; };
   nixpkgs.hostPlatform = "aarch64-darwin";
 
-  environment.systemPackages = import ./packages.nix { inherit pkgs; };
+  environment.systemPackages =
+    (import ./packages.nix { inherit pkgs; })
+    ++ [
+      pkgs.karabiner-elements
+    ];
+
+  programs.zsh.enable = true;
 
   system.primaryUser = "user";
   system.stateVersion = 6;
 
-  services.karabiner-elements = {
-    enable = true;
-    package = pkgs.karabiner-elements;
-  };
 }

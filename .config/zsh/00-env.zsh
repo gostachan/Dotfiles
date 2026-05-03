@@ -10,6 +10,3 @@ export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 
 # flutter
 export PATH="$PATH:$HOME/.pub-cache/bin"
-
-# claude code
-export PATH="$HOME/.local/bin:$PATH"

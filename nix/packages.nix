@@ -19,6 +19,7 @@ let
 
   cliTools = [
     buf
+    codex
     claude-code
     ipcalc
     marp-cli
@@ -27,6 +28,8 @@ let
     terraform
     tmux
     tree-sitter
+    uv
+    zsh
   ];
 in
 languages ++ languageServers ++ cliTools
