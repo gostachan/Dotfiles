@@ -14,6 +14,13 @@
 
   programs.zsh.enable = true;
 
+  homebrew = {
+    enable = true;
+    casks = [
+      "keyboardcleantool"
+    ];
+  };
+
   system.primaryUser = "user";
   system.stateVersion = 6;
 
