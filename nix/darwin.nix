@@ -20,6 +20,7 @@
 
   homebrew = {
     enable = true;
+    onActivation.adoptExistingApps = true;
     casks = [
       "keyboardcleantool"
     ];
