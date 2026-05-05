@@ -14,6 +14,10 @@
 
   programs.zsh.enable = true;
 
+  fonts.packages = [
+    pkgs.nerd-fonts.hack
+  ];
+
   homebrew = {
     enable = true;
     casks = [

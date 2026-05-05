@@ -24,5 +24,6 @@ selection-background = #434c5e
 selection-foreground = #d8dee9
 font-family = Hack Nerd Font
 font-size = 13
+font-feature = -calt, -liga, -dlig
 mouse-reporting = false
 keybind = cmd+enter=unbind
