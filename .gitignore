@@ -62,6 +62,8 @@
 !/.xsessionrc
 !/.config/
 !/.config/**
+/.config/containers/**
+/.config/uv/uv-receipt.json
 /.config/zsh/99-local.zsh
 !/.gitignore_global
 !/.gitconfig_shared

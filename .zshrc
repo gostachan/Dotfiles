@@ -5,5 +5,3 @@ if [ -d "$ZSH_CONFIG_DIR" ]; then
     [ -r "$file" ] && source "$file"
   done
 fi
-
-
