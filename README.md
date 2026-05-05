@@ -60,13 +60,15 @@ Karabiner-Elements は Nix package として入れる。`services.karabiner-elem
 
 標準 shell は zsh を使う。`nix/darwin.nix` で `programs.zsh.enable = true` として有効化する。
 
-この repo の Nix entrypoint は `flake.nix`。現在の macOS 構成は `default` として定義する。
+この repo の Nix entrypoint は `flake.nix`。汎用 macOS 構成は `default` として定義する。
 
 新しい Mac の初回セットアップ:
 
 ```sh
 ~/.dotfiles/.bin/bootstrap.sh
 ```
+
+`nix-darwin` は `SUDO_USER` / `USER` から現在の non-root ユーザーを読み取り、`system.primaryUser` に使う。
 
 確認なしで進める場合:
 
@@ -77,13 +79,13 @@ Karabiner-Elements は Nix package として入れる。`services.karabiner-elem
 手動で初回適用する場合:
 
 ```sh
-sudo nix run github:nix-darwin/nix-darwin/master#darwin-rebuild -- switch --flake ~/.dotfiles#default
+sudo nix run github:nix-darwin/nix-darwin/master#darwin-rebuild -- switch --impure --flake ~/.dotfiles#default
 ```
 
 `darwin-rebuild` が入った後の再適用:
 
 ```sh
-sudo darwin-rebuild switch --flake ~/.dotfiles#default
+sudo darwin-rebuild switch --impure --flake ~/.dotfiles#default
 ```
 
 ## Homebrew を cask だけに絞る理由

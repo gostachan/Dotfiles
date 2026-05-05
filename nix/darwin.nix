@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs, primaryUser, ... }:
 
 {
   nix.enable = false;
@@ -25,7 +25,7 @@
     ];
   };
 
-  system.primaryUser = "user";
+  system.primaryUser = primaryUser;
   system.stateVersion = 6;
 
 }

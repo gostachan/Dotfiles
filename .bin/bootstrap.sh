@@ -179,12 +179,12 @@ switch_darwin() {
 
   if command -v darwin-rebuild >/dev/null 2>&1; then
     log "applying nix-darwin configuration: $CONFIG_NAME"
-    run "${sudo_cmd[@]}" darwin-rebuild switch --flake "$flake_ref"
+    run "${sudo_cmd[@]}" darwin-rebuild switch --impure --flake "$flake_ref"
     return
   fi
 
   log "applying nix-darwin configuration with nix run: $CONFIG_NAME"
-  run "${sudo_cmd[@]}" "$nix_cmd" run github:nix-darwin/nix-darwin/master#darwin-rebuild -- switch --flake "$flake_ref"
+  run "${sudo_cmd[@]}" "$nix_cmd" run github:nix-darwin/nix-darwin/master#darwin-rebuild -- switch --impure --flake "$flake_ref"
 }
 
 while [ "$#" -gt 0 ]; do
