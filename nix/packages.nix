@@ -23,6 +23,7 @@ let
     claude-code
     ipcalc
     marp-cli
+    mise
     neovim
     podman
     ripgrep
