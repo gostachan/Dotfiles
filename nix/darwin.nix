@@ -14,6 +14,11 @@
 
   programs.zsh.enable = true;
 
+  security.pam.services.sudo_local = {
+    touchIdAuth = true;
+    reattach = true;
+  };
+
   fonts.packages = [
     pkgs.nerd-fonts.hack
   ];
