@@ -3,10 +3,21 @@
 with pkgs;
 
 let
+  python314_4 = python314.override {
+    sourceVersion = {
+      major = "3";
+      minor = "14";
+      patch = "4";
+      suffix = "";
+    };
+    hash = "sha256-2SPFEwPjjiSRNvwb3zVo1W7LAyFO/e9IUWF209f6rvg=";
+  };
+
   languages = [
     go
     nodejs
     pnpm
+    (lib.meta.hiPrio python314_4)
   ];
 
   languageServers = [
