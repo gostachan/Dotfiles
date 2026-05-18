@@ -32,6 +32,7 @@ let
     buf
     codex
     claude-code
+    gh
     ipcalc
     marp-cli
     mise
