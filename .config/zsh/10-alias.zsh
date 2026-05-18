@@ -62,4 +62,5 @@ alias mysqlp='mysql -h mysql -u user -p practice'
 alias ezsh='nvim ~/.zshrc && source ~/.zshrc'
 alias etmux='vim ~/.tmux.conf && tmux display-message "Reloaded tmux.conf" && tmux source-file ~/.tmux.conf'
 
-
+# claude
+alias csp='claude --dangerously-skip-permissions'
