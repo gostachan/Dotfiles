@@ -67,6 +67,8 @@
 /.config/zsh/99-local.zsh
 !/.gitignore_global
 !/.gitconfig_shared
+!/.claude/
+!/.claude/settings.json
 
 !/README.md
 !/AGENTS.md
