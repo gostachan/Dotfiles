@@ -64,3 +64,6 @@ alias etmux='vim ~/.tmux.conf && tmux display-message "Reloaded tmux.conf" && tm
 
 # claude
 alias csp='claude --dangerously-skip-permissions'
+
+# python
+alias p='python3'
