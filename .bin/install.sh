@@ -5,6 +5,16 @@ helpmsg() {
   command echo ""
 }
 
+link_file() {
+  local src="$1" dst="$2"
+  if [[ -L "$dst" ]]; then
+    command rm -f "$dst"
+  elif [[ -e "$dst" ]]; then
+    command mv "$dst" "$HOME/.dotbackup/"
+  fi
+  command ln -snf "$src" "$dst"
+}
+
 link_to_homedir() {
   command echo "backup old dotfiles..."
   if [ ! -d "$HOME/.dotbackup" ];then
@@ -16,14 +26,17 @@ link_to_homedir() {
   local dotdir=$(dirname ${script_dir})
   if [[ "$HOME" != "$dotdir" ]];then
     for f in $dotdir/.??*; do
-      [[ `basename $f` == ".git" ]] && continue
-      if [[ -L "$HOME/`basename $f`" ]];then
-        command rm -f "$HOME/`basename $f`"
+      local name="$(basename "$f")"
+      [[ "$name" == ".git" ]] && continue
+      if [[ -d "$f" && -d "$HOME/$name" && ! -L "$HOME/$name" ]]; then
+        # 既存の実ディレクトリがある場合はファイル単位でリンク
+        command mkdir -p "$HOME/$name"
+        for inner in "$f"/*; do
+          link_file "$inner" "$HOME/$name/$(basename "$inner")"
+        done
+      else
+        link_file "$f" "$HOME/$name"
       fi
-      if [[ -e "$HOME/`basename $f`" ]];then
-        command mv "$HOME/`basename $f`" "$HOME/.dotbackup"
-      fi
-      command ln -snf $f $HOME
     done
   else
     command echo "same install src dest"
