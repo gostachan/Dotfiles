@@ -30,6 +30,8 @@
     ];
   };
 
+  system.defaults.dock.mru-spaces = false;
+
   system.primaryUser = primaryUser;
   system.stateVersion = 6;
 
