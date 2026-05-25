@@ -30,6 +30,23 @@ return {
       end,
       desc = "Previous git hunk",
     },
+    {
+      "<leader>gb",
+      function()
+        local gs = require("gitsigns")
+        gs.toggle_current_line_blame(true)
+        local bufnr = vim.api.nvim_get_current_buf()
+        vim.defer_fn(function()
+          gs.toggle_current_line_blame(false)
+          for name, id in pairs(vim.api.nvim_get_namespaces()) do
+            if name:match("gitsigns_blame") then
+              pcall(vim.api.nvim_buf_clear_namespace, bufnr, id, 0, -1)
+            end
+          end
+        end, 2000)
+      end,
+      desc = "Show blame for current line for 2 seconds",
+    },
   },
   config = function()
     local function set_gitsigns_highlights()
@@ -53,9 +70,9 @@ return {
         delete = { text = "_" },
       },
       signcolumn = true,
-      current_line_blame = true,
+      current_line_blame = false,
       current_line_blame_opts = {
-        delay = 300,
+        delay = 0,
       },
       watch_gitdir = {
         interval = 1000,
