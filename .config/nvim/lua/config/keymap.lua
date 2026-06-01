@@ -83,6 +83,10 @@ local function move_keep_screen_col(motion)
   end
 end
 
+-- JSONを整形（1行JSONをインデント付きで折り返す）
+vim.keymap.set("n", "<leader>fj", "<Cmd>%!jq .<CR>", { desc = "Format JSON with jq" })
+vim.keymap.set("v", "<leader>fj", ":!jq .<CR>", { desc = "Format selected JSON with jq" })
+
 vim.keymap.set("n", "J", move_keep_screen_row("j"), { desc = "Move down while keeping screen row" })
 vim.keymap.set("n", "K", move_keep_screen_row("k"), { desc = "Move up while keeping screen row" })
 vim.keymap.set("n", "H", move_keep_screen_col("h"), { desc = "Move left while keeping screen column" })
