@@ -4,7 +4,7 @@ return {
   build = "cd app && npm install",
   ft = { "markdown" },
   init = function()
-    vim.g.mkdp_auto_close = 1
+    vim.g.mkdp_auto_close = 0
     vim.g.mkdp_browser = ""
     vim.g.mkdp_echo_preview_url = 1
     vim.g.mkdp_theme = "dark"
