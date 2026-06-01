@@ -1,4 +1,28 @@
 {
+  "permissions": {
+    "allow": [
+      "Edit",
+      "Write",
+      "Read",
+      "Bash(git status)",
+      "Bash(git status:*)",
+      "Bash(git diff)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git show:*)",
+      "Bash(git branch)",
+      "Bash(git branch:*)",
+      "Bash(gh diff*)",
+      "Bash(gh pr view)",
+      "Bash(gh pr view:*)"
+    ],
+    "deny": []
+  },
+  "model": "opus[1m]",
+  "skipDangerousModePermissionPrompt": true,
   "theme": "dark",
-  "model": "opus[1m]"
+  "enabledPlugins": {
+    "skill-creator@claude-plugins-official": true
+  }
 }
